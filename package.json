@@ -4,7 +4,8 @@
   "description": "The best Hook-based State-Manager for React your $$$ cannot buy!",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test-init": "ts-jest config:init",
+    "test": "jest --config jest.config.js"
   },
   "keywords": [
     "react",
