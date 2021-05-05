@@ -1,0 +1,18 @@
+{
+  "name": "gstate",
+  "version": "0.1.0",
+  "description": "The best Hook-based State-Manager for React your $$$ cannot buy!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "state",
+    "state-management",
+    "react-hook",
+    "state-hook"
+  ],
+  "author": "vutr",
+  "license": "MIT"
+}
