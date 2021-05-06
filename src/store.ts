@@ -1,12 +1,15 @@
 import { Dispatch } from 'react'
 
+export const __stores__: Record<string, object> = {}
+
 export class Store<T> {
   _dps: Set<Dispatch<T>>
   _s: T
 
-  constructor(obj: T) {
+  constructor(obj: T, name = '__global__') {
     this._s = obj
     this._dps = new Set([])
+    __stores__[name] = this
   }
 
   getState(): T {
