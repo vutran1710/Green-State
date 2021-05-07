@@ -4,7 +4,7 @@ import { render, fireEvent, screen } from '@testing-library/react'
 import { __version__ } from '../src'
 
 
-const TestApp: React.FC<any> = ({ children }) => {
+const TestApp = ({ children }) => {
   const [showMessage, setShowMessage] = React.useState(false)
   return (
     <div>

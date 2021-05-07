@@ -35,15 +35,9 @@ test('test hook useGValue', () => {
 
     return (
       <div>
-	<button onClick={handleClick} data-testid="inc-4">
-	  Increase
-	</button>
-	<button onClick={makeGreet} data-testid="greet">
-	  Greet
-	</button>
-	<p data-testid="message">
-	  {`count = ${cnt}`}
-	</p>
+	<button onClick={handleClick} data-testid="inc-4">Increase</button>
+	<button onClick={makeGreet} data-testid="greet">Greet</button>
+	<p data-testid="message">{`count = ${cnt}`}</p>
       </div>
     )
   }
@@ -55,5 +49,4 @@ test('test hook useGValue', () => {
 
   fireEvent.click(screen.getByTestId('greet'))
   expect(greet).toEqual('Hello Vietnam')
-
 })

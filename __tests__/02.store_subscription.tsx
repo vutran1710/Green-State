@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom'
-import { Dispatch } from 'react'
 import { Store } from '../src'
 import { Subscriber } from '../src/subscriber'
 
@@ -21,7 +20,7 @@ test('version check', () => {
   let greet = ''
 
 
-  const subscriber: Subscriber<State, any> = new Subscriber(
+  const subscriber: Subscriber<State, keyof State> = new Subscriber(
     (s) => {
       greet = `${s.hello} World`
     },

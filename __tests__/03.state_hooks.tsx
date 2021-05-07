@@ -21,9 +21,7 @@ test('test hook useGValue', () => {
     return (
       <div>
 	<button onClick={handleClick} data-testid="inc-1">Increase</button>
-	<p data-testid="message">
-	  {`count = ${cnt}`}
-	</p>
+	<p data-testid="message">{`count = ${cnt}`}</p>
       </div>
     )
   }
@@ -52,7 +50,6 @@ test('test hook useGValue', () => {
 
   fireEvent.click(screen.getByTestId('inc-3'))
   expect(screen.getByTestId('message').innerHTML).toEqual('count = 4')
-
 })
 
 
@@ -77,9 +74,7 @@ test('test hook useGState', () => {
     return (
       <div>
 	<button onClick={handleClick} data-testid="inc-1">Increase</button>
-	<p data-testid="message">
-	  {`count = ${cnt.count}`}
-	</p>
+	<p data-testid="message">{`count = ${cnt.count}`}</p>
       </div>
     )
   }
