@@ -1,6 +1,6 @@
 {
   "name": "@vutr/gstate",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "The best Hook-based State-Manager for React your $$$ cannot buy!",
   "main": "lib/index.js",
   "files": ["lib"],
