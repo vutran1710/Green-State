@@ -218,6 +218,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - me@vutr.io
+Vu Tran  - me@vutr.io
 
 Project Link: [https://github.com/vutran1710/Green-State](https://github.com/vutran1710/Green-State)
