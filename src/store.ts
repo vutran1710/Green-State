@@ -3,7 +3,7 @@ import { useState, Dispatch, useEffect, SetStateAction } from 'react'
 export type Dispatcher<T> = Dispatch<SetStateAction<T>>
 export type Action<K, T> = (value: T, state: K) => Partial<K> | void
 
-export class Store<T extends Record<string, any>> {
+export class Store<T extends Record<string, unknown>> {
   _s: T
   _dps: Set<Dispatcher<T>>
 
@@ -54,7 +54,7 @@ export class Store<T extends Record<string, any>> {
     ]
   }
 
-  useAction = <K extends unknown>(action: Action<T, K>) => (k: K) => {
+  useAction = <K extends unknown>(action: Action<T, K>): ((k: K) => void) => (k: K) => {
     // TODO:
     // - support async/await
     // - set state in the middle

@@ -2,3 +2,4 @@ __coverage__
 node_modules/
 .pnpm-debug.log
 pnpm-lock.yaml
+lib/

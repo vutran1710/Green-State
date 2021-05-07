@@ -4,7 +4,7 @@
   "description": "The best Hook-based State-Manager for React your $$$ cannot buy!",
   "main": "index.js",
   "scripts": {
-    "test-init": "ts-jest config:init",
+    "build": "tsc",
     "test": "jest --config jest.config.js --watchAll",
     "lint": "eslint . --ext .ts --fix"
   },
