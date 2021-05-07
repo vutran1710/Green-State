@@ -54,10 +54,12 @@ export class Store<T extends Record<string, any>> {
     ]
   }
 
-  useActions = <K extends unknown>(action: Action<T, K>) => (o: K) => {
-    // TODO: support async/await
+  useAction = <K extends unknown>(action: Action<T, K>) => (k: K) => {
+    // TODO:
+    // - support async/await
+    // - set state in the middle
     const state = this.getState()
-    const result = action(o, state)
+    const result = action(k, state)
 
     if (typeof result === 'object') {
       this.setState(result)
