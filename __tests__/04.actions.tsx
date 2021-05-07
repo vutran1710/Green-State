@@ -55,4 +55,5 @@ test('test hook useGValue', () => {
 
   fireEvent.click(screen.getByTestId('greet'))
   expect(greet).toEqual('Hello Vietnam')
+
 })
