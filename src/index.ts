@@ -1,2 +1,2 @@
-export { GStore as Store } from './gstore'
+export * from './store'
 export const __version__ = '0.1.0'

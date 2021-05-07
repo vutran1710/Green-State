@@ -1,8 +1,9 @@
 import { useState, Dispatch, useEffect, SetStateAction } from 'react'
 
-type Dispatcher<T> = Dispatch<SetStateAction<T>>
+export type Dispatcher<T> = Dispatch<SetStateAction<T>>
+export type Action<K, T> = (value: T, state: K) => Partial<K> | void
 
-export class GStore<T extends Record<string, any>> {
+export class Store<T extends Record<string, any>> {
   _s: T
   _dps: Set<Dispatcher<T>>
 
@@ -16,6 +17,10 @@ export class GStore<T extends Record<string, any>> {
     this._dps.forEach(dispatch => dispatch(this._s))
   }
 
+  getState(): T {
+    return this._s
+  }
+
   subscribe(dispatch: Dispatcher<T>): void {
     this._dps.add(dispatch)
   }
@@ -24,8 +29,8 @@ export class GStore<T extends Record<string, any>> {
     this._dps.delete(dispatch)
   }
 
-  useGValue<K extends keyof T>(k: K): [T[K], Dispatch<T[K]>] {
-    const [state, setGState] = useState(this._s)
+  useGValue = <K extends keyof T>(k: K): [T[K], Dispatch<T[K]>] => {
+    const [state, setGState] = useState(this.getState())
     useEffect(() => {
       this.subscribe(setGState)
       return () => this.unsubscribe(setGState)
@@ -36,8 +41,8 @@ export class GStore<T extends Record<string, any>> {
     ]
   }
 
-  useGState<K extends keyof T>(...keys: K[]): [Pick<T, K[][number]>, (obj: Partial<T>) => void] {
-    const [state, setGState] = useState(this._s)
+  useGState = <K extends keyof T>(...keys: K[]): [Pick<T, K[][number]>, (obj: Partial<T>) => void] => {
+    const [state, setGState] = useState(this.getState())
     useEffect(() => {
       this.subscribe(setGState)
       return () => this.unsubscribe(setGState)
@@ -47,5 +52,15 @@ export class GStore<T extends Record<string, any>> {
       result,
       (obj: Partial<T>) => this.setState(obj),
     ]
+  }
+
+  useActions = <K extends unknown>(action: Action<T, K>) => (o: K) => {
+    // TODO: support async/await
+    const state = this.getState()
+    const result = action(o, state)
+
+    if (typeof result === 'object') {
+      this.setState(result)
+    }
   }
 }

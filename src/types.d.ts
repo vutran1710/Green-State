@@ -1,1 +1,0 @@
-export { IStoreOptions } from './store'
