@@ -1,15 +1,16 @@
-import { useState, Dispatch, useEffect, SetStateAction } from 'react'
-import { Subscriber, Dispatcher } from './subscriber'
+import { useState, Dispatch, useEffect } from 'react'
+import { Subscriber } from './subscriber'
 import * as _ from './help'
 
 
+export type Keys<T> = keyof T
 export type StateSetter<T> = (obj: Partial<T>) => void
 export type Action<T, K> = (value: K, state: T, setState: StateSetter<T>) => Partial<T> | void
 
 
 export class Store<T extends Record<string, unknown>> {
   _s: T
-  _dps: Map<keyof T, Set<Subscriber<T, any>>>
+  _dps: Map<keyof T, Set<Subscriber<T, Keys<T>>>>
 
   constructor(obj: T) {
     this._s = obj
@@ -19,7 +20,7 @@ export class Store<T extends Record<string, unknown>> {
   setState(newState: Partial<T>): void {
     const keys = _.diffing(this._s, newState)
     this._s = { ...this._s, ...newState }
-    const subscribers: Set<Subscriber<T, any>> = new Set()
+    const subscribers: Set<Subscriber<T, Keys<T>>> = new Set()
 
     keys.forEach(key => {
       const keySubscribers = this._dps.get(key)

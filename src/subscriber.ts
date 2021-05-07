@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from 'react'
 export type Dispatcher<T> = Dispatch<SetStateAction<T>> | ((obj: T) => void)
 
 
-export class Subscriber<T extends object, K extends keyof T> {
+export class Subscriber<T extends Record<string, unknown>, K extends keyof T> {
   keys: K[]
   dispatch: Dispatcher<T>
 
