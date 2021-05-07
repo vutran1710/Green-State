@@ -1,7 +1,8 @@
 import { useState, Dispatch, useEffect, SetStateAction } from 'react'
 
 export type Dispatcher<T> = Dispatch<SetStateAction<T>>
-export type Action<K, T> = (value: T, state: K) => Partial<K> | void
+export type StateSetter<T> = (obj: Partial<T>) => void
+export type Action<T, K> = (value: K, state: T, setState: StateSetter<T>) => Partial<T> | void
 
 export class Store<T extends Record<string, unknown>> {
   _s: T
@@ -59,7 +60,7 @@ export class Store<T extends Record<string, unknown>> {
     // - support async/await
     // - set state in the middle
     const state = this.getState()
-    const result = action(k, state)
+    const result = action(k, state, this.setState.bind(this))
 
     if (typeof result === 'object') {
       this.setState(result)
