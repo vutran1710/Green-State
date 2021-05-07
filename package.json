@@ -1,15 +1,19 @@
 {
-  "name": "gstate",
-  "version": "0.1.0",
+  "name": "clean-state",
+  "version": "1.0.0",
   "description": "The best Hook-based State-Manager for React your $$$ cannot buy!",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "files": ["lib"],
   "scripts": {
     "build": "tsc",
     "test": "jest --config jest.config.js --watchAll",
-    "lint": "eslint . --ext .ts --fix"
+    "test-nowatch": "jest --config jest.config.js",
+    "lint": "eslint . --ext .ts --fix",
+    "prepublish": "rm -rf lib && npm run lint && npm run test-nowatch && npm run build"
   },
   "keywords": [
     "react",
+    "hook",
     "state",
     "state-management",
     "react-hook",
