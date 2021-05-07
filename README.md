@@ -5,7 +5,7 @@
   </a>
 
   <p align="center">
-	Help preserving <b>nature</b> by writing <i>less</i> <b>CODE</b> just to manage React shared state!
+	Manage React global/shared state while preserving nature by writing less CODE!
 	<br />
 	<a href="https://github.com/vutran1710/gstate"><strong>Explore the docs »</strong></a>
 	<br />
