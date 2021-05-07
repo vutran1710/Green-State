@@ -188,12 +188,17 @@ type Action<T, K> = (value: K, state: T, setState: StateSetter<T>) => Partial<T>
 ```
 - Define an action and use it to update the State
 - If an action return part of the State, it will be merged to the State, otherwise nothing will happen
-- There will be more updates to *useAction* to support async/await or setState in the middleo of *action* logic soon.
+- Action can be either asynchronous or synchronous
 ```javascript
-  const { useAction, useGValue } = new Store(state)
+  const { useAction, useGValue, StateSetter } = new Store(state)
 
-  const increase: Action<GlobalState, number> = (num, { count }) => {
+  const increase = (num, { count }) => {
 	return { count: count + num }
+  }
+
+  const asyncIncrease = async (num: number, { count }, set: StateSetter<GlobalState>) => {
+	await sleep(300)
+	set({ count: count + num })
   }
 
   let greet = ''
@@ -205,8 +210,10 @@ type Action<T, K> = (value: K, state: T, setState: StateSetter<T>) => Partial<T>
   const TestOne = () => {
 	const cnt = useGValue('count')[0]
 	const inc = useAction(increase)
+	const asinc = useAction(asyncIncrease)
 	const greeting = useAction(changeGreet)
 
+	const clickAsync = () => asinc(3)
 	const handleClick = () => inc(4)
 	const makeGreet = () => greeting('Vietnam')
 
@@ -214,6 +221,7 @@ type Action<T, K> = (value: K, state: T, setState: StateSetter<T>) => Partial<T>
 	  <div>
 		<button onClick={handleClick} data-testid="inc-4">Increase</button>
 		<button onClick={makeGreet} data-testid="greet">Greet</button>
+		<button onClick={clickAsync} data-testid="asinc-3">Async</button>
 		<p data-testid="message">{`count = ${cnt}`}</p>
 	  </div>
 	)

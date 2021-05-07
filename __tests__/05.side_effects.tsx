@@ -1,35 +1,47 @@
 import '@testing-library/jest-dom'
 import * as React from 'react'
-import { render, fireEvent, screen } from '@testing-library/react'
-import { Store, Action } from '../src'
+import { render, fireEvent, screen, act } from '@testing-library/react'
+import { Store, StateSetter } from '../src'
 
 
 type GlobalState = {
   count: number
 }
 
+const sleep = (ms: number) => {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
 
-test('test hook useGValue', () => {
+
+test('test hook useGValue', async () => {
   const state: GlobalState = {
     count: 0
   }
 
   const { useAction, useGValue } = new Store(state)
 
-  const increase: Action<GlobalState, number> = (num, { count }, set) => {
+  let greet = ''
+
+  const increase = (num: number, { count }, set: StateSetter<GlobalState>) => {
     set({ count: count + num })
   }
 
-  let greet = ''
-  const changeGreet: Action<GlobalState, string> = country => {
+  const changeGreet = (country: string) => {
     greet = `Hello ${country}`
+  }
+
+  const asyncIncrease = async (num: number, { count }, set: StateSetter<GlobalState>) => {
+    await sleep(300)
+    set({ count: count + num })
   }
 
   const TestOne = () => {
     const cnt = useGValue('count')[0]
     const inc = useAction(increase)
+    const asinc = useAction(asyncIncrease)
     const greeting = useAction(changeGreet)
 
+    const clickAsync = () => asinc(3)
     const handleClick = () => inc(4)
     const makeGreet = () => greeting('Vietnam')
 
@@ -37,12 +49,13 @@ test('test hook useGValue', () => {
       <div>
 	<button onClick={handleClick} data-testid="inc-4">Increase</button>
 	<button onClick={makeGreet} data-testid="greet">Greet</button>
+	<button onClick={clickAsync} data-testid="asinc-3">Async</button>
 	<p data-testid="message">{`count = ${cnt}`}</p>
       </div>
     )
   }
 
-  render(<TestOne />)
+  await act(async () => render(<TestOne />))
   expect(screen.getByText('count = 0')).not.toBeNull()
   fireEvent.click(screen.getByTestId('inc-4'))
   expect(screen.getByTestId('message').innerHTML).toEqual('count = 4')
@@ -50,4 +63,10 @@ test('test hook useGValue', () => {
   fireEvent.click(screen.getByTestId('greet'))
   expect(greet).toEqual('Hello Vietnam')
 
+  fireEvent.click(screen.getByTestId('asinc-3'))
+  expect(screen.getByTestId('message').innerHTML).toEqual('count = 4')
+  await sleep(200)
+  expect(screen.getByTestId('message').innerHTML).toEqual('count = 4')
+  await sleep(200)
+  expect(screen.getByTestId('message').innerHTML).toEqual('count = 7')
 })

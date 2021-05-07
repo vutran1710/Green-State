@@ -5,7 +5,9 @@ import * as _ from './help'
 
 export type Keys<T> = keyof T
 export type StateSetter<T> = (obj: Partial<T>) => void
-export type Action<T, K> = (value: K, state: T, setState: StateSetter<T>) => Partial<T> | void
+export type Action<T, K> = (value: K, state: T, setState: StateSetter<T>) => (
+  Partial<T> | void | Promise<Partial<T> | void>
+)
 
 
 export class Store<T extends Record<string, unknown>> {
@@ -82,15 +84,21 @@ export class Store<T extends Record<string, unknown>> {
     ]
   }
 
-  useAction = <K extends unknown>(action: Action<T, K>): ((k: K) => void) => (k: K) => {
-    // TODO:
-    // - support async/await
-    // - set state in the middle
-    const state = this.getState()
-    const result = action(k, state, this.setState.bind(this))
+  useAction = <K>(action: Action<T, K>): ((k: K) => void | Promise<void>) => {
+    const handleResult = (result: Partial<T> | null | undefined | void): void => {
+      if (typeof result === 'object') {
+	this.setState(result)
+      }
+    }
 
-    if (typeof result === 'object') {
-      this.setState(result)
+    return (k: K) => {
+      const result = action(k, this._s, this.setState.bind(this))
+
+      if (result instanceof Promise) {
+	return result.then(handleResult)
+      }
+
+      return handleResult(result)
     }
   }
 }
