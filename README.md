@@ -93,7 +93,17 @@ const state: GlobalState = {
 }
 
 const store = new Store(state)
-export default store
+import { Store } from '@vutr/gstate'
+
+const State = {
+  count: 1
+}
+
+const store = new Store(State)
+
+export const useGValue = store.useGValue
+export const useGState = store.useGState
+export const useAction = store.useAction
 ```
 
 - Second, use The-Damn-Store!! Your precious state will be shared between components.
@@ -143,6 +153,10 @@ const state: GlobalState = {
 }
 
 const store = new Store(state)
+
+export const useGValue = store.useGValue
+export const useGState = store.useGState
+export const useAction = store.useAction
 ```
 
 ### useGValue
