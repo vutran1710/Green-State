@@ -86,7 +86,7 @@ test('test hook useGState', () => {
 
   const TestTwo = () => {
     const [cnt, setCnt] = useGState('count', 'hello')
-    const handleClick = () => setCnt({ count: cnt.count + 3 })
+    const handleClick = () => setCnt({ count: cnt.count + 3, hello: 'world' })
     return (
       <div>
 	<button onClick={handleClick} data-testid="inc-3">Increase</button>

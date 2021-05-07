@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom'
 import { Dispatch } from 'react'
 import { Store } from '../src'
+import { Subscriber } from '../src/subscriber'
 
 type State = {
   hello: string
@@ -19,11 +20,15 @@ test('version check', () => {
 
   let greet = ''
 
-  const subscriber: Dispatch<State> = (s) => {
-    greet = `${s.hello} World`
-  }
 
-  store.subscribe(subscriber)
+  const subscriber: Subscriber<State, any> = new Subscriber(
+    (s) => {
+      greet = `${s.hello} World`
+    },
+    ['hello', 'count']
+  )
+
+  store.subscribe(subscriber, ['count', 'hello'])
 
   store.setState({ hello: 'Ciao' })
   expect(greet).toEqual('Ciao World')
@@ -34,7 +39,7 @@ test('version check', () => {
     count: 0,
   })
 
-  store.unsubscribe(subscriber)
+  store.unsubscribe(subscriber, ['count', 'hello'])
   store.setState({ hello: 'Bonjour' })
   expect(greet).toEqual('Ciao World')
 
