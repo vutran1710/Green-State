@@ -1,19 +1,19 @@
 <br />
 <p align="center">
-  <a href="https://github.com/vutran1710/gstate">
-	<img src="doc/logo.png" alt="Logo" width="500">
+  <a href="https://github.com/vutran1710/Green-State">
+	<img src="https://raw.githubusercontent.com/vutran1710/Green-State/master/doc/logo.png" alt="Logo" width="500">
   </a>
 
   <p align="center">
 	Manage React global/shared state while preserving nature by writing less CODE!
 	<br />
-	<a href="https://github.com/vutran1710/gstate"><strong>Explore the docs »</strong></a>
+	<a href="https://github.com/vutran1710/Green-State"><strong>Explore the docs »</strong></a>
 	<br />
 	<br />
 	·
-	<a href="https://github.com/vutran1710/gstate/issues">Report Bug</a>
+	<a href="https://github.com/vutran1710/Green-State/issues">Report Bug</a>
 	·
-	<a href="https://github.com/vutran1710/gstate/issues">Request Feature</a>
+	<a href="https://github.com/vutran1710/Green-State/issues">Request Feature</a>
   </p>
 </p>
 
@@ -220,4 +220,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Your Name - me@vutr.io
 
-Project Link: [https://github.com/vutran1710/gstate](https://github.com/vutran1710/gstate)
+Project Link: [https://github.com/vutran1710/Green-State](https://github.com/vutran1710/Green-State)
