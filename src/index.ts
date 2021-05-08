@@ -1,2 +1,9 @@
 export * from './store'
-export const __version__ = '0.1.0'
+export {
+  StateObj,
+  StateSetter,
+  GValueReturn,
+  GStateReturn,
+  Action,
+} from './base_store'
+export const __version__ = '1.0.5'

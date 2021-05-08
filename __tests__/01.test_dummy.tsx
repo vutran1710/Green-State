@@ -21,7 +21,7 @@ const TestApp = ({ children }) => {
 }
 
 test('version check', () => {
-  expect(__version__).toEqual('0.1.0')
+  expect(__version__).toEqual('1.0.5')
 })
 
 test('test react-test setup', () => {

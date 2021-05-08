@@ -1,15 +1,20 @@
-export const diffing = <T extends Record<string, unknown>, K extends keyof T>(state: T, newState: Partial<T>): Set<K> => {
-  const keys = new Set([])
-  for (const key in newState) {
-    const newVal = newState[key]
-    const currentVal = state[key]
-    if (newVal !== currentVal) keys.add(key)
-  }
-  return keys
+export const diffing = <T extends Record<string, unknown>, K extends keyof T>(
+  state: T,
+  newState: Partial<T>,
+): Set<K> => {
+  const updatedKeys = Object
+    .keys(newState)
+    .filter(k => k in state)
+    .filter(k => newState[k] !== state[k]) as K[]
+
+  return new Set(updatedKeys)
 }
 
 
-export const pickKeys = <T extends Record<string, unknown>, K extends keyof T>(state: T, keys: K[]): Pick<T, K[][number]> => {
+export const pickKeys = <T extends Record<string, unknown>, K extends keyof T>(
+  state: T,
+  keys: K[],
+): Pick<T, K[][number]> => {
   const result = keys.reduce((ac, k) => ({ ...ac, [k]: state[k] }), {}) as Pick<T, K[][number]>
   return result
 }
