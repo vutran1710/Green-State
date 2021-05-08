@@ -45,14 +45,24 @@
 </details>
 
 
+There has been numerous open-source projects that try to tackle the problem with React shared state. Well here is the news for you: I tried them all. Sorry I lied - I mean most of them. But then here is another bad news: most of them are overly complicated, with unfriendly API and introduce way too much brain-load as well as boilerplate code.
+
+But what if we can have a Library with minimal APIs and flat-learning curve that will not take us more than 10 minutes to grasp? One of the few best stuffs that may fall in such cateogry I would honor here is *zustand* and *redux-zero*. *Redux-zero* is great for those who love to stick with Redux's style, while *zustand* is nice for modern adopters who favor *react-hooks*.
+
+Yet though I love hooks, I don't feel quite right with *zustand*, meanwhile I'm done with *Redux* for ages already. Well that means I have to do it myself - the way I like. And I hope you would like it as well.
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-There has been numerous open-source projects that try to tackle the problem with React shared state. Well here is the news for you: I tried them all. Sorry I lied - I mean most of them. But then here is another bad news: most of them are overly complicated, with unfriendly API and introduce way too much brain-load as well as boilerplate code.
-
-Now since I'm pretty lazy and impatient, I tend to use something that is WAAAY easier to understand, with minimal APIs and flat-learning curve that will not take me more than 10 minutes to grasp. One of the few best stuffs that may fall in such cateogry I would honor here is *zustand* and *redux-zero*. *Redux-zero* is great for those who love to stick with Redux's style, while *zustand* is nice for modern adopters who favor *react-hooks*.
-
-Problem is, I'd love to have a hook-based tool to manage global/shared state between components. Yet I don't feel quite right with *zustand*, meanwhile I'm done with *Redux* for ages already. Well that means I have to do it myself - the way I like. And I hope you would like it as well.
+GreenState is a state-management library that helps develop shared or global state between components using the sweet React-Hooks. The Aim is to provide one of the friendlies API that - as *Steve Job* used to say - `It just works!`.
+```
+Let's say, you declare **Your State**, ask a key name - that's simple -  and GreenState returns just its value to you??
+```
+ You can use it to create as many stores as you like. The APIs are minmal, support all basic cases, including..
+1. Get a single value from Store
+2. Get a group of values from Store
+3. Get a derived-value / composed-value from Store (just like you would with RecoilSelector)
+4. Intuitive type-hint support with typescript!
+5. Maximum coverage!
 
 ### Built With
 
@@ -134,26 +144,40 @@ const TestTwo = () => {
 <!-- APIs -->
 ## APIs
 
-**Store(intialState: Record<string, any>)**
+**Store(intialState: Record<string, any>, derivedState?: (state) => Record<string, any>)**
+
+- Aside from defining **initialState**, you can optionally have **derivedState** passed to **Store**. The *derivedState* is something just like *RecoilSelector*, or React's *getDerivedState*
+- Combine everything we have something like...
 
 ```javascript
 import { Store } from '@vutr/gstate'
-
-type GlobalState = {
-  count: number
-  hello: string
+type State = {
+  count1: number
+  count2: number
 }
 
-const state: GlobalState = {
-  count: 0,
-  hello: 'World'
+type DerivedState = {
+  total: number
+  divided: number
 }
 
-const store = new Store(state)
+const state: State = {
+  count1: 1,
+  count2: 1,
+}
+
+const derived = (state: State): DerivedState => ({
+  total: state.count1 + state.count2,
+  divided: state.count1 / state.count2,
+})
+
+const store = new Store(state, derived)
 
 export const useGValue = store.useGValue
 export const useGState = store.useGState
 export const useAction = store.useAction
+export const useDerivedValue = store.useDerivedValue
+export const useDerivedState = store.useDerivedState
 ```
 
 
@@ -190,44 +214,85 @@ type Action<T, K> = (value: K, state: T, setState: StateSetter<T>) => Partial<T>
 - If an action return part of the State, it will be merged to the State, otherwise nothing will happen
 - Action can be either asynchronous or synchronous
 ```javascript
-  const { useAction, useGValue, StateSetter } = new Store(state)
+const { useAction, useGValue, StateSetter } = new Store(state)
 
-  const increase = (num, { count }) => {
-	return { count: count + num }
-  }
+const increase = (num, { count }) => {
+  return { count: count + num }
+}
 
-  const asyncIncrease = async (num: number, { count }, set: StateSetter<GlobalState>) => {
-	await sleep(300)
-	set({ count: count + num })
-  }
+const asyncIncrease = async (num: number, { count }, set: StateSetter<GlobalState>) => {
+  await sleep(300)
+  set({ count: count + num })
+}
 
-  let greet = ''
-  const changeGreet: Action<GlobalState, string> = (country, _, set) => {
-	greet = `Hello ${country}`
-	set({ hello: 'Cial' })
-  }
+let greet = ''
+const changeGreet: Action<GlobalState, string> = (country, _, set) => {
+  greet = `Hello ${country}`
+  set({ hello: 'Cial' })
+}
 
-  const TestOne = () => {
-	const cnt = useGValue('count')[0]
-	const inc = useAction(increase)
-	const asinc = useAction(asyncIncrease)
-	const greeting = useAction(changeGreet)
+const TestOne = () => {
+  const cnt = useGValue('count')[0]
+  const inc = useAction(increase)
+  const asinc = useAction(asyncIncrease)
+  const greeting = useAction(changeGreet)
 
-	const clickAsync = () => asinc(3)
-	const handleClick = () => inc(4)
-	const makeGreet = () => greeting('Vietnam')
+  const clickAsync = () => asinc(3)
+  const handleClick = () => inc(4)
+  const makeGreet = () => greeting('Vietnam')
 
-	return (
-	  <div>
-		<button onClick={handleClick} data-testid="inc-4">Increase</button>
-		<button onClick={makeGreet} data-testid="greet">Greet</button>
-		<button onClick={clickAsync} data-testid="asinc-3">Async</button>
-		<p data-testid="message">{`count = ${cnt}`}</p>
-	  </div>
-	)
-  }
-
+  return (
+	<div>
+	  <button onClick={handleClick} data-testid="inc-4">Increase</button>
+	  <button onClick={makeGreet} data-testid="greet">Greet</button>
+	  <button onClick={clickAsync} data-testid="asinc-3">Async</button>
+	  <p data-testid="message">{`count = ${cnt}`}</p>
+	</div>
+  )
+}
 ```
+
+
+**useDerivedValue(key: K extends keyof DerivedState) => DerivedState[K]**
+**useDerivedState(...keys: Array<K extends keyof DerivedState>) => Pick<DerivedState, keys>**
+
+Example
+```typescript
+type State = {
+  count1: number
+  count2: number
+}
+
+type DerivedState = {
+  total: number
+  divided: number
+}
+
+const state: State = {
+  count1: 1,
+  count2: 1,
+}
+
+const derived = (state: State): DerivedState => ({
+  total: state.count1 + state.count2,
+  divided: state.count1 / state.count2,
+})
+
+const { useGValue, useDerivedValue, useDerivedState } = new Store(state, derived)
+
+const TestOne = () => {
+  const total = useDerivedValue('total')
+  const totalObject = useDerivedState('total', 'divided')
+
+  return (
+	<div>
+	  <p data-testid="total">{`total = ${total}`}</p>
+	  <p data-testid="derived">{`derived = ${totalObject.divided}`}</p>
+	</div>
+  )
+}
+```
+
 
 <!-- CONTRIBUTING -->
 ## Contributing

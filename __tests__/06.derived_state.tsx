@@ -4,17 +4,18 @@ import { render, fireEvent, screen, act } from '@testing-library/react'
 import { Store } from '../src'
 
 
-type State = {
-  count1: number
-  count2: number
-}
-
-type DerivedState = {
-  total: number
-  divided: number
-}
 
 test('test hook useGValue', async () => {
+  type State = {
+    count1: number
+    count2: number
+  }
+
+  type DerivedState = {
+    total: number
+    divided: number
+  }
+
   const state: State = {
     count1: 1,
     count2: 1,
