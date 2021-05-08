@@ -18,6 +18,12 @@
 </p>
 
 
+There has been numerous open-source projects that try to tackle the problem with React shared state, but here is a bad news: most of them are overly complicated, with unfriendly API and introduce way too much brain-load as well as boilerplate code.
+
+What if we can have a Library with minimal APIs and flat-learning curve that will not take us more than 5 minutes to grasp? One of the few best stuffs that may fall in such cateogry I would honor here is *zustand* and *redux-zero*. *Redux-zero* is great for those who love to stick with Redux's style, while *zustand* is nice for modern adopters who favor *react-hooks*.
+
+Yet though I love hooks, I don't feel quite right with *zustand*, meanwhile I'm done with *Redux* for ages already. Well that means I have to do it myself - the way I like. And I hope you would like it as well.
+
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
@@ -44,12 +50,6 @@
   </ol>
 </details>
 
-
-There has been numerous open-source projects that try to tackle the problem with React shared state. Well here is the news for you: I tried them all. Sorry I lied - I mean most of them. But then here is another bad news: most of them are overly complicated, with unfriendly API and introduce way too much brain-load as well as boilerplate code.
-
-But what if we can have a Library with minimal APIs and flat-learning curve that will not take us more than 10 minutes to grasp? One of the few best stuffs that may fall in such cateogry I would honor here is *zustand* and *redux-zero*. *Redux-zero* is great for those who love to stick with Redux's style, while *zustand* is nice for modern adopters who favor *react-hooks*.
-
-Yet though I love hooks, I don't feel quite right with *zustand*, meanwhile I'm done with *Redux* for ages already. Well that means I have to do it myself - the way I like. And I hope you would like it as well.
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -253,8 +253,9 @@ const TestOne = () => {
 ```
 
 
-**useDerivedValue(key: K extends keyof DerivedState) => DerivedState[K]**
-**useDerivedState(...keys: Array<K extends keyof DerivedState>) => Pick<DerivedState, keys>**
+- **useDerivedValue(key: K extends keyof DerivedState) => DerivedState[K]**
+
+- **useDerivedState(...keys: Array<K extends keyof DerivedState>) => Pick<DerivedState, keys>**
 
 Example
 ```typescript
