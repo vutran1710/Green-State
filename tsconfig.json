@@ -2,7 +2,7 @@
   "compilerOptions": {
     "jsx": "react",
     "alwaysStrict": true,
-    "target": "es2015",
+    "target": "es5",
     "moduleResolution": "node",
     "rootDir": "src",
     "declaration": true,
