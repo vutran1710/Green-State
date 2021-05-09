@@ -2,7 +2,7 @@
   "compilerOptions": {
     "jsx": "react",
     "alwaysStrict": true,
-    "target": "ES2016",
+    "target": "ES2015",
     "moduleResolution": "node",
     "rootDir": "src",
     "declaration": true,
