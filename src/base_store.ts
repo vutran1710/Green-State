@@ -31,9 +31,12 @@ export class BaseStore<T extends StateObj> {
 
     keys.forEach(key => {
       const keySubscribers = this.subs.get(key)
-      if (keySubscribers.size) {
-	keySubscribers.forEach(s => subscribers.add(s))
+
+      if (!keySubscribers || !keySubscribers.size) {
+	return
       }
+
+      keySubscribers.forEach(s => subscribers.add(s))
     })
 
     subscribers.forEach(s => {
