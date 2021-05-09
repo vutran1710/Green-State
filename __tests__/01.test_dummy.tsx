@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom'
 import * as React from 'react'
 import { render, fireEvent, screen } from '@testing-library/react'
-import { __version__ } from '../src'
 
 
 const TestApp = ({ children }) => {
@@ -19,10 +18,6 @@ const TestApp = ({ children }) => {
     </div>
   )
 }
-
-test('version check', () => {
-  expect(__version__).toEqual('1.0.5')
-})
 
 test('test react-test setup', () => {
   const testMessage = 'Test Message'
