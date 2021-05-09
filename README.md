@@ -224,15 +224,15 @@ const increase = (num, { count }) => {
   return { count: count + num }
 }
 
-const asyncIncrease = async (num: number, { count }, set: StateSetter<GlobalState>) => {
+const asyncIncrease = async (num: number, { get, set }) => {
   await sleep(300)
-  set({ count: count + num })
+  set({ count: get().count + num })
 }
 
 let greet = ''
-const changeGreet: Action<GlobalState, string> = (country, _, set) => {
+const changeGreet: Action<GlobalState, string> = (country, { set }) => {
   greet = `Hello ${country}`
-  set({ hello: 'Cial' })
+  set({ hello: 'Ciao' })
 }
 
 const TestOne = () => {
