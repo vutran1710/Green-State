@@ -5,10 +5,14 @@ import * as _ from './help'
 
 export type StateObj = Record<string, unknown>
 export type Keys<T extends StateObj> = keyof T
+
 export type StateSetter<T extends StateObj> = (obj: Partial<T>) => void
+export type StateGetter<T extends StateObj> = () => T
+
 export type GValueReturn<T extends StateObj, K extends keyof T> = [T[K], Dispatch<T[K]>]
 export type GStateReturn<T extends StateObj, K extends keyof T> = [Pick<T, K[][number]>, (obj: Partial<T>) => void]
-export type Action<T extends StateObj, K> = (value: K, state: T, setState: StateSetter<T>) => (
+
+export type Action<T extends StateObj, K> = (value: K, { get, set }: { get: StateGetter<T>, set: StateSetter<T> }) => (
   Partial<T> | void | Promise<Partial<T> | void>
 )
 
@@ -99,7 +103,12 @@ export class BaseStore<T extends StateObj> {
     }
 
     return (k: K) => {
-      const result = action(k, this.state, this.setState.bind(this))
+      const getSet = {
+	get: this.getState.bind(this),
+	set: this.setState.bind(this)
+      }
+
+      const result = action(k, getSet)
 
       if (result instanceof Promise) {
 	return result.then(handleResult)

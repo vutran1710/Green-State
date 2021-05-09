@@ -61,6 +61,7 @@ Let's say, you declare **Your State**, ask a key name - that's simple -  and Gre
 1. Get a single value from Store
 2. Get a group of values from Store
 3. Get a derived-value / composed-value from Store (just like you would with RecoilSelector)
+4. Dispatch an action to update store - either *async* or non-asynchronous
 4. Intuitive type-hint support with typescript!
 5. Maximum coverage!
 
@@ -206,13 +207,16 @@ console.log(setObj) // Function(x: Partial<State>) => void
 ```
 
 
-**useAction(action: Action<State, args>) => (args) => Partial<State> | void**
+**useAction(action: Action<State, args>) => (args, { get, set }) => Partial<State> | void**
 ```typescript
-type Action<T, K> = (value: K, state: T, setState: StateSetter<T>) => Partial<T> | void
+type Action<T extends StateObj, K> = (value: K, { get: StateGetter<T>, set: StateSetter<T> }) => (
+  Partial<T> | void | Promise<Partial<T> | void>
+)
 ```
 - Define an action and use it to update the State
 - If an action return part of the State, it will be merged to the State, otherwise nothing will happen
-- Action can be either asynchronous or synchronous
+- Action can be either asynchronous or synchronous - meaning async/await works just fine
+- *get* State or *set* State freely
 ```javascript
 const { useAction, useGValue, StateSetter } = new Store(state)
 

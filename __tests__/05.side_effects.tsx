@@ -22,17 +22,17 @@ test('test hook useGValue', async () => {
 
   let greet = ''
 
-  const increase = (num: number, { count }, set: StateSetter<GlobalState>) => {
-    set({ count: count + num })
+  const increase = (num: number, { get, set }) => {
+    set({ count: get().count + num })
   }
 
   const changeGreet = (country: string) => {
     greet = `Hello ${country}`
   }
 
-  const asyncIncrease = async (num: number, { count }, set: StateSetter<GlobalState>) => {
+  const asyncIncrease = async (num: number, { get, set }) => {
     await sleep(300)
-    set({ count: count + num })
+    set({ count: get().count + num })
   }
 
   const TestOne = () => {

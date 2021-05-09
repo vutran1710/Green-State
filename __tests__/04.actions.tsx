@@ -16,8 +16,8 @@ test('test hook useGValue', () => {
 
   const { useAction, useGValue } = new Store(state)
 
-  const increase: Action<GlobalState, number> = (num, { count }) => {
-    return { count: count + num }
+  const increase: Action<GlobalState, number> = (num, { get }) => {
+    return { count: get().count + num }
   }
 
   let greet = ''
