@@ -1,9 +1,9 @@
-import { BaseStore, StateObj, GStateReturn, GValueReturn } from './base_store'
+import { BaseStore, GStateReturn, GValueReturn } from './base_store'
 
-export type GDerivedState<T, K extends Record<string, unknown>> = (state: T) => K
+export type GDerivedState<T, K> = (state: T) => K
 
 
-export class Store<T extends StateObj, D extends StateObj> extends BaseStore<T> {
+export class Store<T, D> extends BaseStore<T> {
   derivedStore: BaseStore<D>
   deriveFunc: GDerivedState<T, D>
 

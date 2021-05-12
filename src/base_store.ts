@@ -3,21 +3,21 @@ import { Subscriber } from './subscriber'
 import * as _ from './help'
 
 
-export type StateObj = Record<string, unknown>
-export type Keys<T extends StateObj> = keyof T
 
-export type StateSetter<T extends StateObj> = (obj: Partial<T>) => void
-export type StateGetter<T extends StateObj> = () => T
+export type Keys<T> = keyof T
 
-export type GValueReturn<T extends StateObj, K extends keyof T> = [T[K], Dispatch<T[K]>]
-export type GStateReturn<T extends StateObj, K extends keyof T> = [Pick<T, K[][number]>, (obj: Partial<T>) => void]
+export type StateSetter<T> = (obj: Partial<T>) => void
+export type StateGetter<T> = () => T
 
-export type Action<T extends StateObj, K> = (value: K, { get, set }: { get: StateGetter<T>, set: StateSetter<T> }) => (
+export type GValueReturn<T, K extends keyof T> = [T[K], Dispatch<T[K]>]
+export type GStateReturn<T, K extends keyof T> = [Pick<T, K[][number]>, (obj: Partial<T>) => void]
+
+export type Action<T, K> = (value: K, { get, set }: { get: StateGetter<T>, set: StateSetter<T> }) => (
   Partial<T> | void | Promise<Partial<T> | void>
 )
 
 
-export class BaseStore<T extends StateObj> {
+export class BaseStore<T> {
   state: T
   subs: Map<keyof T, Set<Subscriber<T, Keys<T>>>>
 
@@ -37,7 +37,7 @@ export class BaseStore<T extends StateObj> {
       const keySubscribers = this.subs.get(key)
 
       if (!keySubscribers || !keySubscribers.size) {
-	return
+        return
       }
 
       keySubscribers.forEach(s => subscribers.add(s))
@@ -56,7 +56,7 @@ export class BaseStore<T extends StateObj> {
   subscribe<K extends keyof T>(sub: Subscriber<T, K>, keys: K[]): void {
     keys.forEach(key => {
       if (!this.subs.has(key)) {
-	this.subs.set(key, new Set([]))
+        this.subs.set(key, new Set([]))
       }
       this.subs.get(key).add(sub)
     })
@@ -98,20 +98,20 @@ export class BaseStore<T extends StateObj> {
   useAction = <K>(action: Action<T, K>): ((k: K) => void | Promise<void>) => {
     const handleResult = (result: Partial<T> | null | undefined | void): void => {
       if (typeof result === 'object') {
-	this.setState(result)
+        this.setState(result)
       }
     }
 
     return (k: K) => {
       const getSet = {
-	get: this.getState.bind(this),
-	set: this.setState.bind(this)
+        get: this.getState.bind(this),
+        set: this.setState.bind(this)
       }
 
       const result = action(k, getSet)
 
       if (result instanceof Promise) {
-	return result.then(handleResult)
+        return result.then(handleResult)
       }
 
       return handleResult(result)

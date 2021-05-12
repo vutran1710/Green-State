@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import * as React from 'react'
 import { render, fireEvent, screen, act } from '@testing-library/react'
-import { Store, StateSetter } from '../src'
+import { Store } from '../src'
 
 
 type GlobalState = {
