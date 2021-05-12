@@ -3,7 +3,6 @@ export {
   GDerivedState,
 } from './store'
 export {
-  StateObj,
   StateSetter,
   GValueReturn,
   GStateReturn,
