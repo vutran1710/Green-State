@@ -3,13 +3,16 @@
   "version": "2.0.2",
   "description": "The best Hook-based State-Manager for React your $$$ cannot buy!",
   "main": "lib/index.js",
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "rm -rf lib && tsc",
     "test": "jest --config jest.config.js --watchAll",
     "test-nowatch": "jest --config jest.config.js",
     "lint": "eslint . --fix",
-    "prepublish": "rm -rf lib && npm run lint && npm run test-nowatch && npm run build"
+    "pretty": "prettier --write .",
+    "prepublish": "rm -rf lib && npm run pretty && npm run lint && npm run test-nowatch && npm run build"
   },
   "keywords": [
     "react",
@@ -30,6 +33,7 @@
     "@typescript-eslint/parser": "^4.22.1",
     "eslint": "^7.25.0",
     "jest": "^26.6.3",
+    "prettier": "^2.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "ts-jest": "^26.5.6",

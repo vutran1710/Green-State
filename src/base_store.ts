@@ -1,8 +1,6 @@
-import { useState, Dispatch, useEffect } from 'react'
-import { Subscriber } from './subscriber'
-import * as _ from './help'
-
-
+import { useState, Dispatch, useEffect } from "react"
+import { Subscriber } from "./subscriber"
+import * as _ from "./help"
 
 export type Keys<T> = keyof T
 
@@ -10,20 +8,21 @@ export type StateSetter<T> = (obj: Partial<T>) => void
 export type StateGetter<T> = () => T
 
 export type GValueReturn<T, K extends keyof T> = [T[K], Dispatch<T[K]>]
-export type GStateReturn<T, K extends keyof T> = [Pick<T, K[][number]>, (obj: Partial<T>) => void]
+export type GStateReturn<T, K extends keyof T> = [
+  Pick<T, K[][number]>,
+  (obj: Partial<T>) => void
+]
 
-export type Action<T, K> = (value: K, { get, set }: { get: StateGetter<T>, set: StateSetter<T> }) => (
-  Partial<T> | void | Promise<Partial<T> | void>
-)
-
+export type Action<T, K> = (
+  value: K,
+  { get, set }: { get: StateGetter<T>; set: StateSetter<T> }
+) => Partial<T> | void | Promise<Partial<T> | void>
 
 export class BaseStore<T> {
   state: T
   subs: Map<keyof T, Set<Subscriber<T, Keys<T>>>>
 
-  constructor(
-    initialState: T,
-  ) {
+  constructor(initialState: T) {
     this.state = initialState
     this.subs = new Map()
   }
@@ -33,17 +32,17 @@ export class BaseStore<T> {
     this.state = { ...this.state, ...newState }
     const subscribers: Set<Subscriber<T, Keys<T>>> = new Set()
 
-    keys.forEach(key => {
+    keys.forEach((key) => {
       const keySubscribers = this.subs.get(key)
 
       if (!keySubscribers || !keySubscribers.size) {
         return
       }
 
-      keySubscribers.forEach(s => subscribers.add(s))
+      keySubscribers.forEach((s) => subscribers.add(s))
     })
 
-    subscribers.forEach(s => {
+    subscribers.forEach((s) => {
       const value = _.pickKeys(this.state, s.keys)
       s.dispatch(value)
     })
@@ -54,7 +53,7 @@ export class BaseStore<T> {
   }
 
   subscribe<K extends keyof T>(sub: Subscriber<T, K>, keys: K[]): void {
-    keys.forEach(key => {
+    keys.forEach((key) => {
       if (!this.subs.has(key)) {
         this.subs.set(key, new Set([]))
       }
@@ -63,7 +62,7 @@ export class BaseStore<T> {
   }
 
   unsubscribe<K extends keyof T>(sub: Subscriber<T, K>, keys: K[]): void {
-    keys.forEach(key => {
+    keys.forEach((key) => {
       this.subs.get(key).delete(sub)
     })
   }
@@ -88,16 +87,18 @@ export class BaseStore<T> {
       this.subscribe(subscriber, keys)
       return () => this.unsubscribe(subscriber, keys)
     }, [])
-    const result = keys.reduce((ac, k) => ({ ...ac, [k]: state[k] }), {}) as Pick<T, K[][number]>
-    return [
-      result,
-      (obj: Partial<T>) => this.setState(obj),
-    ]
+    const result = keys.reduce(
+      (ac, k) => ({ ...ac, [k]: state[k] }),
+      {}
+    ) as Pick<T, K[][number]>
+    return [result, (obj: Partial<T>) => this.setState(obj)]
   }
 
   useAction = <K>(action: Action<T, K>): ((k: K) => void | Promise<void>) => {
-    const handleResult = (result: Partial<T> | null | undefined | void): void => {
-      if (typeof result === 'object') {
+    const handleResult = (
+      result: Partial<T> | null | undefined | void
+    ): void => {
+      if (typeof result === "object") {
         this.setState(result)
       }
     }
@@ -105,7 +106,7 @@ export class BaseStore<T> {
     return (k: K) => {
       const getSet = {
         get: this.getState.bind(this),
-        set: this.setState.bind(this)
+        set: this.setState.bind(this),
       }
 
       const result = action(k, getSet)
